@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractBaseUser, UserManager
 
 from account_app.validators import TelegramUsernameValidator, max_upload_image_profile
 from core_app.models import CreateMixin, UpdateMixin, SoftDeleteMixin
@@ -15,12 +15,22 @@ class User(AbstractBaseUser, CreateMixin, UpdateMixin, SoftDeleteMixin):
     email = models.EmailField(
         blank=True,
     )
+    is_superuser = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'telegram_id'
     REQUIRED_FIELDS = ('username', 'email')
 
+    objects = UserManager()
+
     def __str__(self):
-        return self.telegram_id
+        return str(self.telegram_id)
+
+    def has_module_perms(self, app_label):
+        return True
+
+    def has_perm(self, obj):
+        return True
 
     class Meta:
         db_table = 'auth_user'
