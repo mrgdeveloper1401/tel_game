@@ -6,7 +6,7 @@ from core_app.models import CreateMixin, UpdateMixin, SoftDeleteMixin
 
 
 class User(AbstractBaseUser, CreateMixin, UpdateMixin, SoftDeleteMixin):
-    telegram_id = models.BigIntegerField(blank=True, null=True, editable=False)
+    telegram_id = models.BigIntegerField(unique=True, editable=False)
     username = models.CharField(
         blank=True,
         null=True,
@@ -15,6 +15,9 @@ class User(AbstractBaseUser, CreateMixin, UpdateMixin, SoftDeleteMixin):
     email = models.EmailField(
         blank=True,
     )
+
+    USERNAME_FIELD = 'telegram_id'
+    REQUIRED_FIELDS = ('username', 'email')
 
     def __str__(self):
         return self.telegram_id
