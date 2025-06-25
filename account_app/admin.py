@@ -55,6 +55,11 @@ class UserAdmin(BaseUserAdmin):
         "user_permissions"
     )
     list_per_page = 20
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+        "telegram_id"
+    )
 
     def get_queryset(self, request):
         query = super().get_queryset(request)

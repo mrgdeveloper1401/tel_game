@@ -5,14 +5,14 @@ from django.utils.translation import gettext_lazy as _
 
 
 class CreateMixin(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, editable=False)
 
     class Meta:
         abstract = True
 
 
 class UpdateMixin(models.Model):
-    updated_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True, editable=False)
 
     class Meta:
         abstract = True
