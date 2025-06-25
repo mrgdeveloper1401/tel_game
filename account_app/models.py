@@ -1,30 +1,34 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, UserManager
+from django.contrib.auth.models import AbstractBaseUser, UserManager, PermissionsMixin
 
 from account_app.validators import TelegramUsernameValidator, max_upload_image_profile
 from core_app.models import CreateMixin, UpdateMixin, SoftDeleteMixin
 
 
-class User(AbstractBaseUser, CreateMixin, UpdateMixin, SoftDeleteMixin):
-    telegram_id = models.BigIntegerField(unique=True, editable=False)
+class User(AbstractBaseUser, CreateMixin, UpdateMixin, SoftDeleteMixin, PermissionsMixin):
+    telegram_id = models.BigIntegerField(
+        unique=True,
+        editable=False
+    )
     username = models.CharField(
         blank=True,
         null=True,
+        unique=True,
         validators=[TelegramUsernameValidator()],
     )
     email = models.EmailField(
         blank=True,
     )
-    is_superuser = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
-    USERNAME_FIELD = 'telegram_id'
-    REQUIRED_FIELDS = ('username', 'email')
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ('email',)
 
     objects = UserManager()
 
     def __str__(self):
-        return str(self.telegram_id)
+        return self.username
 
     def has_module_perms(self, app_label):
         return True
@@ -50,7 +54,9 @@ class Profile(CreateMixin, UpdateMixin, SoftDeleteMixin):
     )
     profile_image = models.ImageField(
         upload_to='profile_images/%Y/%m/%d',
-        validators=[max_upload_image_profile]
+        validators=(max_upload_image_profile,),
+        blank=True,
+        null=True
     )
 
     def __str__(self):
