@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-from .models import Cart, Spring, UserSpring, UserCart
+from .models import Cart, Spring, UserSpring, UserCart, UserStep, Step
 
 
 @admin.register(Cart)
@@ -77,4 +77,41 @@ class UserSpringAdmin(admin.ModelAdmin):
             "created_at",
             "created_date",
             "is_active"
+        )
+
+
+@admin.register(UserStep)
+class ModelNameAdmin(admin.ModelAdmin):
+    raw_id_fields = (
+        "user",
+        "step"
+    )
+    list_display = ("user", "step", "is_active", "created_at", "updated_at")
+    list_editable = ("is_active",)
+    list_filter = ("is_active",)
+    list_per_page = 20
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).only(
+            "user__username",
+            "step__point",
+            "is_active",
+            "created_at",
+            "updated_at"
+        )
+
+
+@admin.register(Step)
+class ModelNameAdmin(admin.ModelAdmin):
+    list_display = ('point', "created_at", "is_active")
+    list_filter = ("created_at", "is_active")
+    list_per_page = 20
+    list_editable = ("is_active",)
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).only(
+            "point",
+            "created_at",
+            "step_image",
+            "is_active",
         )

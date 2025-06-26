@@ -78,3 +78,32 @@ class UserSpring(CreateMixin, UpdateMixin, SoftDeleteMixin):
                 condition=models.Q(is_active=True),
             )
         ]
+
+
+class Step(CreateMixin, UpdateMixin, SoftDeleteMixin):
+    point = models.PositiveSmallIntegerField()
+    step_image = models.ImageField(
+        upload_to="step_images/%Y/%m/%d",
+    )
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        db_table = "step"
+
+
+class UserStep(CreateMixin, UpdateMixin, SoftDeleteMixin):
+    user = models.ForeignKey(
+        "account_app.User",
+        on_delete=models.PROTECT,
+        related_name="user_step"
+    )
+    step = models.ForeignKey(
+        Step,
+        on_delete=models.PROTECT,
+        related_name="step_step"
+    )
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        db_table = "user_step"
+
