@@ -1,5 +1,7 @@
+from django.core import exceptions
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, UserManager, PermissionsMixin
+from django.utils.translation import gettext_lazy as _
 
 from account_app.validators import TelegramUsernameValidator, max_upload_image_profile
 from core_app.models import CreateMixin, UpdateMixin, SoftDeleteMixin
@@ -8,7 +10,6 @@ from core_app.models import CreateMixin, UpdateMixin, SoftDeleteMixin
 class User(AbstractBaseUser, CreateMixin, UpdateMixin, SoftDeleteMixin, PermissionsMixin):
     telegram_id = models.BigIntegerField(
         unique=True,
-        editable=False
     )
     username = models.CharField(
         blank=True,
@@ -77,3 +78,28 @@ class UserNotification(CreateMixin, UpdateMixin, SoftDeleteMixin):
 
     class Meta:
         db_table = 'auth_user_notification'
+
+
+class UserInvite(CreateMixin, UpdateMixin, SoftDeleteMixin):
+    from_user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='from_user_invite',
+                                  help_text=_("از کاربر"))
+    to_user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='to_user_invite',
+                                help_text=_("به کاربر"))
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        db_table = "user_invite"
+        unique_together = (
+            "from_user",
+            "to_user"
+        )
+
+    # validate not same from_user and to_user
+    def clean(self):
+        if self.pk is None:
+            if self.from_user.id == self.to_user.id:
+                raise exceptions.ValidationError(
+                    {
+                        "from_user": _("from_user and to_user not be the same"),
+                    }
+                )

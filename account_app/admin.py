@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
 
-from .models import User, Profile, UserNotification
+from .models import User, Profile, UserNotification, UserInvite
 
 
 @admin.register(User)
@@ -33,7 +33,7 @@ class UserAdmin(BaseUserAdmin):
             None,
             {
                 "classes": ("wide",),
-                "fields": ("username", "usable_password", "password1", "password2"),
+                "fields": ("username", "telegram_id","usable_password", "password1", "password2"),
             },
         ),
     )
@@ -58,7 +58,6 @@ class UserAdmin(BaseUserAdmin):
     readonly_fields = (
         "created_at",
         "updated_at",
-        "telegram_id"
     )
 
     def get_queryset(self, request):
@@ -87,5 +86,30 @@ class ProfileAdmin(admin.ModelAdmin):
             "created_at"
         )
         return queryset
+
+
+@admin.register(UserInvite)
+class UserInviteAdmin(admin.ModelAdmin):
+    list_display = (
+        "from_user",
+        "to_user",
+        "is_active",
+        "created_at"
+    )
+    list_per_page = 20
+    list_filter = ("is_active", "created_at")
+    list_editable = ("is_active",)
+    raw_id_fields = (
+        "from_user",
+        "to_user"
+    )
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).only(
+            "from_user__username",
+            "to_user__username",
+            "created_at",
+            "is_active"
+        )
 
 admin.site.register(UserNotification)

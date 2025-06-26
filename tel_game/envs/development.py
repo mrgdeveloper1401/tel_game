@@ -37,3 +37,6 @@ DATABASES = {
 }
 
 CACHES['default']["LOCATION"] = "redis://127.0.0.1:6380/9"
+
+MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = "/media/"
