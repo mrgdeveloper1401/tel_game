@@ -7,6 +7,7 @@ COPY . .
 RUN adduser -D -H tel_game && \
     pip install colorlog && \
     pip install psycopg2-binary && \
+    pip install psycopg[pool] && \
     chmod +x ./scripts/* && \
     chown -R tel_game:tel_game /app
 
