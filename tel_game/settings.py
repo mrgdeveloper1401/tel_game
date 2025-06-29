@@ -34,6 +34,9 @@ INSTALLED_APPS = [
     "cart_app.apps.CartAppConfig",
 
     "drf_spectacular",
+    "rest_framework",
+    "rest_framework.authtoken",
+    "django_telegram_login"
 ]
 
 MIDDLEWARE = [
@@ -120,10 +123,11 @@ CACHES = {
     }
 }
 
-
-
-
 REST_FRAMEWORK = {
     # YOUR SETTINGS
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
+
+
+TELEGRAM_BOT_TOKEN = config('TELEGRAM_BOT_TOKEN', cast=str, default='')
+TELEGRAM_BOT_NAME = config('TELEGRAM_BOT_NAME', cast=str, default='')

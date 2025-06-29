@@ -16,3 +16,4 @@ colorlog
 psycopg2-binary
 psycopg[pool]
 drf-spectacular
+django-telegram-login
