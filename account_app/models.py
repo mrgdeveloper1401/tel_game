@@ -24,7 +24,7 @@ class User(AbstractBaseUser, CreateMixin, UpdateMixin, SoftDeleteMixin, Permissi
     is_staff = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ('email',)
+    REQUIRED_FIELDS = ('email', "telegram_id")
 
     objects = UserManager()
 
