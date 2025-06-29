@@ -1,0 +1,67 @@
+version: "3"
+
+services:
+  django:
+    ports:
+      - "8000:8000"
+    container_name: tel_game
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    env_file: ".env"
+    depends_on:
+      - db
+
+  db:
+    container_name: tel_game_db
+    image: docker.arvancloud.ir/postgres:16.9-alpine
+    expose:
+      - 5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+    environment:
+      POSTGRES_USER: ${TEL_GAME_POSTDB_USER}
+      POSTGRES_DB: ${TEL_GAME_POSTDB_NAME}
+      POSTGRES_PASSWORD: ${TEL_GAME_POSTDB_PASSWORD}
+
+#  redis:
+#    container_name: vpn_redis
+#    image: redis:7.4-alpine
+#    restart: always
+#    depends_on:
+#      - db
+
+  nginx:
+    container_name: vpn_nginx
+    build:
+      context: nginx
+      dockerfile: Dockerfile
+    restart: always
+    entrypoint: ["nginx", "-g", "daemon off;"]
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - django
+
+#  celery:
+#    container_name: vpn_celery
+#    build:
+#      context: .
+#    restart: always
+#    entrypoint: celery -A dj_vpn.vpn worker -l INFO
+#    depends_on:
+#      - redis
+
+#  pg_hero:
+#    container_name: pg_hero
+#    image: pghero:3.7.0
+#    ports:
+#      - "8080:80"
+#    environment:
+#      - DATABASE_URL=postgres://${VPS_POSTDB_USER}:${VPS_POSTDB_PASSWORD}@db:5432/${VPS_POSTDB_NAME}
+
+volumes:
+  postgres_data:
