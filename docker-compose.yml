@@ -26,12 +26,12 @@ services:
       POSTGRES_DB: ${TEL_GAME_POSTDB_NAME}
       POSTGRES_PASSWORD: ${TEL_GAME_POSTDB_PASSWORD}
 
-#  redis:
-#    container_name: vpn_redis
-#    image: redis:7.4-alpine
-#    restart: always
-#    depends_on:
-#      - db
+  redis:
+    container_name: vpn_redis
+    image: redis:7.4-alpine
+    restart: always
+    depends_on:
+      - db
 
   nginx:
     container_name: vpn_nginx

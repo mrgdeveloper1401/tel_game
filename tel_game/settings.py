@@ -32,6 +32,8 @@ INSTALLED_APPS = [
     "account_app.apps.AccountAppConfig",
     "core_app.apps.CoreAppConfig",
     "cart_app.apps.CartAppConfig",
+
+    "drf_spectacular",
 ]
 
 MIDDLEWARE = [
@@ -116,4 +118,12 @@ CACHES = {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
     }
+}
+
+
+
+
+REST_FRAMEWORK = {
+    # YOUR SETTINGS
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
