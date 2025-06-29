@@ -1,4 +1,4 @@
-FROM tel_game
+FROM tel_game:1.0.0
 
 WORKDIR /app
 
