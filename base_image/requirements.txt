@@ -13,3 +13,5 @@ gunicorn
 httpx
 django-cors-headers
 colorlog
+psycopg2-binary
+psycopg[pool]
