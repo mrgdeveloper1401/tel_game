@@ -106,4 +106,3 @@ class UserStep(CreateMixin, UpdateMixin, SoftDeleteMixin):
 
     class Meta:
         db_table = "user_step"
-
