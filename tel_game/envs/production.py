@@ -20,12 +20,12 @@ DATABASES = {
         'HOST': config("POSTGRES_HOST", default="db", cast=str),
         'PORT': config("POSTDB_PORT", cast=int, default=5432),
 
-        "OPTIONS": {
-            "pool": True,
+        # "OPTIONS": {
+        #     "pool": True,
             # "min_size": config("POOL_MIN_SIZE", default=1, cast=int),
             # "max_size": config("POOL_MAX_SIZE", default=2, cast=int),
             # "timeout": 15,
-        }
+        # }
     }
 }
 
